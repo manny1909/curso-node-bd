@@ -1,0 +1,27 @@
+GET http://localhost:3000/api/v1/products?size=50
+
+
+
+POST http://localhost:3000/api/v1/products
+Content-Type: application/json
+
+{
+    "name": "Practical Steel Pants 2",
+    "price": 664,
+    "image": "https://picsum.photos/seed/cvdjqslTh/640/480"
+}
+
+GET http://localhost:3000/api/v1/products/49cad225-c926-4850-a6c9-d32014f0b70b
+
+
+DELETE  http://localhost:3000/api/v1/products/efbdc6a9-bd3a-4c85-9fac-d309340cbb84
+
+
+PATCH  http://localhost:3000/api/v1/products/efbdc6a9-bd3a-4c85-9fac-d309340cbb84
+Content-Type: application/json
+
+{
+    "name": "Practical Steel Pants 3",
+    "price":1000
+}
+
