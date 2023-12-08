@@ -25,3 +25,4 @@ Content-Type: application/json
     "price":1000
 }
 
+GET http://localhost:3000/paquito?limit=1&offset=2
