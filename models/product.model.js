@@ -8,17 +8,17 @@ const ProductSchema = {
         primaryKey: true,
         autoIncrement: true,
     },
-    nombre: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
-    precio: {
+    price: {
         type: DataTypes.INTEGER,
         allowNull: true,
         unique: false,
     },
-    imagen: {
+    picture: {
         type: DataTypes.STRING,
         allowNull: true,
         unique: false,
@@ -26,15 +26,20 @@ const ProductSchema = {
 }
 
 class Product extends Model {
-    static associate() {
-
+    static associate(db) {
+        this.belongsToMany(db.orders, {
+            as: 'orders',
+            through: db.orderProducts,
+            foreignKey:'productId',
+            otherKey:'orderId'
+        })
     }
     static config(sequelize) {
         return {
             sequelize,
             tableName: PRODUCT_TABLE,
             modelName: 'product',
-            timestamp: true
+            timestamps: false
         }
     }
 }

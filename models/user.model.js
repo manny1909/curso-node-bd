@@ -27,16 +27,25 @@ const UserSchema = {
     },
 }
 class User extends Model {
-    static associate() {
+    static associate(db) {
         //asociaciones de claves foráneas
-
+        this.hasMany(db.orders, {
+            as:'ordersByUser',
+            foreignKey:'userId'
+        })
+        this.belongsToMany(db.roles, {
+            as: 'roles',
+            through: db.userRoles,
+            foreignKey: 'userId',
+            otherKey: 'roleId'
+        })
     }
     static config(sequelize) {
         return {
             sequelize,
             tableName:USER_TABLE,
             modelName: 'User',
-            timestamp: true
+            timestamps: false
         }
     }
 }
@@ -44,5 +53,5 @@ class User extends Model {
 module.exports = {
     USER_TABLE,
     UserSchema,
-    User
+    User,
 }

@@ -4,7 +4,7 @@ const { faker } = require('@faker-js/faker');
 
 const routeApi = require('./routes');
 const { logErrors, errorHandler } = require('./middlewares/errorHandler.handler');
-const {models} = require('./libs/sequelize'); 
+const {models} = require('../models/index').sequelize; 
 const ormErrorHandler = require('./middlewares/ormError.handler');
 
 const app = express()
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 )
 app.get('/paquito', async (req, res) => {
     const { limit, offset } = req.query
-    const users2 = await models.User.findAll()
+    const users2 = await models.User.findAll() 
     if (limit && offset) {
         res.json({
             limit,

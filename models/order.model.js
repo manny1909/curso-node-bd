@@ -1,4 +1,4 @@
-const {Model, DataTypes, Sequelize} = require('sequelize');
+const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const ORDER_TABLE = 'orders'
 const OrderSchema = {
@@ -9,38 +9,43 @@ const OrderSchema = {
     },
     userId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
-            model: 'User', // Nombre de la tabla referenciada
+            model: 'users', // Nombre de la tabla referenciada
             key: 'id',      // Clave primaria de la tabla referenciada
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
     },
-    productId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Product', // Nombre de la tabla referenciada
-            key: 'id',        // Clave primaria de la tabla referenciada
-        },
-    },
-    cantidad: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    // Otros campos que puedas necesitar en la relación entre User y Product
 };
 
 class Order extends Model {
-    static associate(){
+
+    static associate(db) {
+        this.belongsTo(db.users, {
+            as: 'user'
+        })
+        this.belongsToMany(db.products, {
+            as: 'items',
+            through: db.orderProducts,
+            foreignKey: 'orderId',
+            otherKey: 'productId'
+        })
 
     }
-    static config(sequelize){
+    static config(sequelize) {
         return {
             sequelize,
-            tableName:ORDER_TABLE,
-            modelName:'Order',
-            timestamp: true,
+            tableName: ORDER_TABLE,
+            modelName: 'Order',
+            timestamps: false,
         }
+    }
+    get total() {
+        if (this.items && this.items.length > 0) {
+            return this.items.reduce((total, item) => total + item.price * item.orderProduct.amount, 0);
+        }
+        return 0;
     }
 }
 module.exports = {

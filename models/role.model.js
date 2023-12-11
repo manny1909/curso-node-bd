@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize');
-
 const ROLE_TABLE = 'roles'
 
 const RoleSchema = {
@@ -20,15 +19,20 @@ const RoleSchema = {
     }
 }
 class Role extends Model {
-    static associate() {
-
+    static associate(db) {
+        this.belongsToMany(db.users, {
+            as: 'users',
+            through: db.userRoles,
+            foreignKey: 'roleId',
+            otherKey: 'userId'
+        })
     }
     static config(sequelize) {
         return {
             sequelize,
             tableName: ROLE_TABLE,
             modelName: 'Role',
-            timestamp: true,
+            timestamps: false,
         }
     }
 }
